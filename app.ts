@@ -1,12 +1,14 @@
 import * as express from 'express';
 import * as logger from 'morgan';
-import userRouter from './routes/user'
+import * as cors from 'cors';
+import userRouter from './routes/user';
 import cardRouter from './routes/card';
 import taskRouter from './routes/task';
 
 const app = express();
 
 app.use(logger('dev'));
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
