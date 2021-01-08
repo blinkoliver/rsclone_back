@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { v4 as uuid } from "uuid";
-import * as storage from "../storage/fs";
+import * as storage from "../storage/mongo";
 
 const router = Router();
 
 router.get("/", async (req, res, next) => {
-  const cardList = await storage.listAll;
+  const cardList = await storage.listAll();
   res.json(cardList);
 });
 
@@ -24,7 +24,7 @@ router.post("/", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   const { body } = req;
-  const newBody = await storage.update({...body, id:req.params.id});
+  const newBody = await storage.update({ ...body, id: req.params["id"] });
   res.json(newBody);
 });
 

@@ -3,7 +3,10 @@
  */
 import app from '../app';
 import debug0 from 'debug';
-import * as http from 'http';
+import * as http from "http";
+import * as dotenv from 'dotenv'
+
+dotenv.config();
 
 const debug = debug0('rsclone-back:server');
 
