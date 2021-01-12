@@ -3,9 +3,9 @@ import { MongoClient } from "mongodb";
 import { CardType } from "../types/cardType";
 
 dotenv.config();
-// const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_HOST } = process.env;
+const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_HOST } = process.env;
 
-const url = `mongodb+srv://blinkoliver:Tmxeo5ZbVJtdbscr@clonewarscluster.kv87i.mongodb.net/?retryWrites=true&w=majority`;
+const url = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/?retryWrites=true&w=majority`;
 const dbName = "clonewarsDB";
 const collectionName = "cards";
 
