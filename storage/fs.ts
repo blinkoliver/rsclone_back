@@ -33,7 +33,7 @@ export const listAll = async () => await readCardList();
 export const getById = async (id: string): Promise<CardType | undefined> => {
   const list = await readCardList();
   return list.find((el) => {
-    return el.id === id;
+    return el.card_id === id;
   });
 };
 
@@ -46,7 +46,7 @@ export const create = async (item: CardType): Promise<CardType | undefined> => {
 
 export const update = async (item: CardType): Promise<CardType> => {
   const list = await readCardList();
-  const index = list.findIndex((el) => el.id === item.id);
+  const index = list.findIndex((el) => el.card_id === item.card_id);
   if (index !== -1) {
     throw new Error();
   }
@@ -56,7 +56,7 @@ export const update = async (item: CardType): Promise<CardType> => {
 };
 export const remove = async (id: string): Promise<void> => {
   const list = await readCardList();
-  const index = list.findIndex((el) => el.id === id);
+  const index = list.findIndex((el) => el.card_id === id);
   list.splice(index, 1);
   await writeCardList(list);
 };

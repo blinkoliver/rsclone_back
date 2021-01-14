@@ -1,47 +1,74 @@
 import * as dotenv from "dotenv";
 import { MongoClient } from "mongodb";
 import { CardType } from "../types/cardType";
+import { TaskType} from "../types/taskType"
 
 dotenv.config();
 const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_HOST } = process.env;
 
 const url = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/?retryWrites=true&w=majority`;
-const dbName = "clonewarsDB";
-const collectionName = "cards";
+const dbName = "clonewarsDB"; 
+const cardsCollection = "cards";
+const tasksCollection = "tasks";
 
 const getMongoInstance = async () => {
   const client = await MongoClient.connect(url);
   return client.db(dbName);
 };
-const getCollection = async () => {
+const getCardsCollection = async () => {
   const db = await getMongoInstance();
-  return db.collection(collectionName);
+  return db.collection(cardsCollection);
+};
+const getTasksCollection = async () => {
+  const db = await getMongoInstance();
+  return db.collection(tasksCollection);
 };
 
-export const listAll = async () => {
-  const collection = await getCollection();
+export const getAllCards = async () => {
+  const collection = await getCardsCollection();
   return collection.find({}).toArray();
 };
-
-export const getById = async (id: string) => {
-  const collection = await getCollection();
-  return collection.findOne({ id });
+export const getCard = async (card_id: string) => {
+  const collection = await getCardsCollection();
+  return collection.findOne({ card_id });
 };
-
-export const create = async (item: CardType) => {
-  const collection = await getCollection();
-  item["_id"] = item.id;
+export const createCard = async (item: CardType) => {
+  const collection = await getCardsCollection();
   const response = collection.insertOne(item);
   return (await response).ops[0];
 };
+export const updateCard = async (item: CardType) => {
+  const collection = await getCardsCollection();
+  const card_id = item.card_id;
+  const response = collection.replaceOne({ card_id }, item);
+  return (await response).ops[0];
+};
+export const removeCard = async (card_id: string) => {
+  const collection = await getCardsCollection();
+  return collection.deleteOne({ card_id });
+};
 
-export const update = async (item: CardType) => {
-  const collection = await getCollection();
-  const _id  = item.id;
-  const response = collection.replaceOne({ _id }, item);
-  return (await response).ops[0]
+export const getAllTasks = async () => {
+  const collection = await getTasksCollection();
+  return collection.find({}).toArray();
 };
-export const remove = async (id: string) => {
-  const collection = await getCollection();
-  return collection.deleteOne({ id });
+export const getTask = async (task_id: string) => {
+  const collection = await getTasksCollection();
+  return collection.findOne({ task_id });
 };
+export const createTask = async (item: TaskType) => {
+  const collection = await getTasksCollection();
+  const response = collection.insertOne(item);
+  return (await response).ops[0];
+};
+export const updateTask = async (item: TaskType) => {
+  const collection = await getTasksCollection();
+  const task_id = item.task_id;
+  const response = collection.replaceOne({ task_id }, item);
+  return (await response).ops[0];
+};
+export const removeTask = async (task_id: string) => {
+  const collection = await getTasksCollection();
+  return collection.deleteOne({ task_id });
+};
+
