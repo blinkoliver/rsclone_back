@@ -1,26 +1,16 @@
-import * as dotenv from "dotenv";
-import { MongoClient } from "mongodb";
 import { CardType } from "../types/cardType";
-import { TaskType} from "../types/taskType"
+import { TaskType } from "../types/taskType"
+import {getMongoDB} from "../db/mongo"
 
-dotenv.config();
-const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_HOST } = process.env;
-
-const url = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/?retryWrites=true&w=majority`;
-const dbName = "clonewarsDB"; 
 const cardsCollection = "cards";
 const tasksCollection = "tasks";
 
-const getMongoInstance = async () => {
-  const client = await MongoClient.connect(url);
-  return client.db(dbName);
-};
 const getCardsCollection = async () => {
-  const db = await getMongoInstance();
+  const db = await getMongoDB();
   return db.collection(cardsCollection);
 };
 const getTasksCollection = async () => {
-  const db = await getMongoInstance();
+  const db = await getMongoDB();
   return db.collection(tasksCollection);
 };
 
