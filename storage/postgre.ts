@@ -3,7 +3,6 @@ import { CardType } from "../types/cardType";
 import { TaskType } from "../types/taskType";
 const cardsTable = "cards";
 const tasksTable = "tasks";
-
 export const getAllCards = async () => {
   return await knex(cardsTable).select();
 };
