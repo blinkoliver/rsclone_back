@@ -2,8 +2,8 @@ import * as express from 'express';
 import * as logger from 'morgan';
 import * as cors from 'cors';
 import authRouter from './routes/auth';
-import cardRouter from './routes/cards';
-import taskRouter from './routes/tasks';
+import todosRouter from './routes/todos';
+
 
 const app = express();
 
@@ -13,8 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/auth', authRouter);
-app.use('/cards', cardRouter);
-app.use('/tasks', taskRouter);
+app.use('/todos', todosRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,11 +1,11 @@
 import { promises as fsp } from "fs";
-import { CardType } from "../types/cardType";
+import { TodoType } from "../types/todoType";
 
 const fileName = "cards.json";
 const filePath = `${__dirname}/${fileName}`;
 
-const readCardList = async (): Promise<CardType[]> => {
-  let list: CardType[] = [];
+const readCardList = async (): Promise<TodoType[]> => {
+  let list: TodoType[] = [];
   try {
     const contents = await fsp.readFile(filePath, "utf-8");
     const parsedList = JSON.parse(contents);
@@ -22,7 +22,7 @@ const readCardList = async (): Promise<CardType[]> => {
   return list;
 };
 
-const writeCardList = async (list: CardType[]): Promise<CardType[]> => {
+const writeCardList = async (list: TodoType[]): Promise<TodoType[]> => {
   const stringifidedList = JSON.stringify(list);
   await fsp.writeFile(filePath, stringifidedList, "utf-8");
   return list;
@@ -30,23 +30,23 @@ const writeCardList = async (list: CardType[]): Promise<CardType[]> => {
 
 export const listAll = async () => await readCardList();
 
-export const getById = async (id: string): Promise<CardType | undefined> => {
+export const getById = async (id: string): Promise<TodoType | undefined> => {
   const list = await readCardList();
   return list.find((el) => {
-    return el.card_id === id;
+    return el.todo_id === id;
   });
 };
 
-export const create = async (item: CardType): Promise<CardType | undefined> => {
+export const create = async (item: TodoType): Promise<TodoType | undefined> => {
   const list = await readCardList();
   list.push(item);
   await writeCardList(list);
   return item;
 };
 
-export const update = async (item: CardType): Promise<CardType> => {
+export const update = async (item: TodoType): Promise<TodoType> => {
   const list = await readCardList();
-  const index = list.findIndex((el) => el.card_id === item.card_id);
+  const index = list.findIndex((el) => el.todo_id === item.todo_id);
   if (index !== -1) {
     throw new Error();
   }
@@ -56,7 +56,7 @@ export const update = async (item: CardType): Promise<CardType> => {
 };
 export const remove = async (id: string): Promise<void> => {
   const list = await readCardList();
-  const index = list.findIndex((el) => el.card_id === id);
+  const index = list.findIndex((el) => el.todo_id === id);
   list.splice(index, 1);
   await writeCardList(list);
 };

@@ -3,12 +3,11 @@ import knex from "../db/postgre";
 import * as dotenv from "dotenv";
 import * as crypto from "crypto";
 import { v4 as uuid } from "uuid";
+import { auth } from "../middleware/auth";
+import { usersTable, sessionsTable } from "../constants";
 
 dotenv.config();
 const salt = process.env.PG_SALT;
-
-const usersTable = "users";
-const sessionsTable = "sessions";
 
 const router = Router();
 
@@ -26,7 +25,6 @@ router.post("/login", async (req, res, next) => {
     body: { email, password },
   } = req;
   const passwordHash = getPasswordHash(password);
-
   const [user] = await knex(usersTable).select().where({ email, passwordHash });
   const statusCode = user ? 200 : 403;
   const token = user ? generateToken() : undefined;
@@ -44,6 +42,8 @@ router.post("/login", async (req, res, next) => {
     statusCode,
     token,
     reason,
+    username: user.username,
+    email: user.email,
   };
   res.json(response);
 });
@@ -53,7 +53,6 @@ router.post("/registration", async (req, res, next) => {
     body: { username, email, password },
   } = req;
   const passwordHash = getPasswordHash(password);
-  const dashboard_id = uuid();
   const user_id = uuid();
   const token = generateToken();
 
@@ -62,7 +61,6 @@ router.post("/registration", async (req, res, next) => {
   if (username) {
     query = query.orWhere({ username });
   }
-
   const [user] = await query;
 
   if (user) {
@@ -73,7 +71,7 @@ router.post("/registration", async (req, res, next) => {
     return;
   }
 
-  await knex(usersTable).insert({ user_id, username, email, passwordHash, dashboard_id });
+  await knex(usersTable).insert({ user_id, username, email, passwordHash });
 
   const statusCode = 200;
 
@@ -88,22 +86,15 @@ router.post("/registration", async (req, res, next) => {
   const response = {
     statusCode,
     token,
+    username,
+    email
   };
 
   res.json(response);
 });
 
-router.post("/test", async (req, res, next) => {
-  const token = req.header("Authorization");
-
-  const [session] = await knex(sessionsTable).select().where({ token });
-
-  const statusCode =
-    session && new Date(session.expiresAt).getTime() > Date.now() ? 200 : 403;
-
-  res.json({
-    statusCode,
-  });
+router.post("/test", auth, async (req, res, next) => {
+  res.status(200).json({ statusCode: 200 });
 });
 
 export default router;
