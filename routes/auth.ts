@@ -87,14 +87,21 @@ router.post("/registration", async (req, res, next) => {
     statusCode,
     token,
     username,
-    email
+    email,
   };
 
   res.json(response);
 });
 
-router.post("/test", auth, async (req, res, next) => {
-  res.status(200).json({ statusCode: 200 });
+router.get("/", auth, async (req, res, next) => {
+  const user_id = req.app.get("user_id");
+  const user = await knex(usersTable).select().where({ user_id });
+
+  res.status(200).json({
+    statusCode: 200,
+    username: user[0].username,
+    email: user[0].email,
+  });
 });
 
 export default router;
