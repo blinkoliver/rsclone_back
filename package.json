@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "start": "node dist/bin/www.js",
-    "build": "tsc",
-    "postinstall": "npm run build",
+    "typescript": "tsc",
+    "build": "yarn typescript",
     "dev": "nodemon"
   },
   "dependencies": {
+    "aws-sdk": "^2.843.0",
+    "base64-img": "^1.0.4",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",

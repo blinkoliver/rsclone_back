@@ -44,6 +44,7 @@ router.post("/login", async (req, res, next) => {
     reason,
     username: user.username,
     email: user.email,
+    userId: user.user_id,
   };
   res.json(response);
 });
@@ -88,6 +89,7 @@ router.post("/registration", async (req, res, next) => {
     token,
     username,
     email,
+    userId: user.user_id,
   };
 
   res.json(response);
@@ -101,6 +103,7 @@ router.get("/", auth, async (req, res, next) => {
     statusCode: 200,
     username: user[0].username,
     email: user[0].email,
+    userId: user_id,
   });
 });
 
