@@ -2,6 +2,10 @@
   "name": "rsclone-back",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "14.x",
+    "yarn": "1.x"
+  },
   "scripts": {
     "start": "node dist/bin/www.js",
     "typescript": "tsc",
